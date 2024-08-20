@@ -33,13 +33,11 @@ public class TComp : MonoBehaviour {
       delta += trackedRigidbody.velocity * strengthV;
     }
 
-    delta += linearOffset;
-
     float deltaTSF = switchRT ? Time.deltaTime : Time.unscaledDeltaTime;
 
     Vector3 omegaPos = Vector3.Lerp ( transform.position - linearOffset, delta, strengthLD * deltaTSF ) + linearOffset;
-    if ( ( omegaPos - transform.position ).sqrMagnitude > teleportRange ) {
-      omegaPos = delta;
+    if ( ( omegaPos - transform.position ).magnitude > teleportRange && teleportRange != -1 ) {
+      omegaPos = delta + linearOffset;
     }
     transform.position = omegaPos;
     transform.rotation = Quaternion.Lerp ( transform.rotation, trackedTransform.rotation, strengthR * deltaTSF );

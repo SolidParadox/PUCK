@@ -12,6 +12,8 @@ public class PUCK : MonoBehaviour {
   public float stunDuration;
   private float stunDelta;
 
+  public float maxRampControlAngle;
+
   public bool IsStunned { get { return stunDelta > 0; } }
 
   private float AngleNormalizer ( float past, float current ) {
@@ -52,7 +54,7 @@ public class PUCK : MonoBehaviour {
 
   private void FixedUpdate () {
     float aT = Vector2.SignedAngle ( Vector2.up, direction );
-    float aC = Vector2.SignedAngle ( Vector2.up, acs.rgb.transform.up );
+    float aC = Vector3.SignedAngle ( Vector3.up, acs.rgb.transform.up, Vector3.forward );
 
     aT = AngleNormalizer ( deltaAT, aT );
     aC = AngleNormalizer ( deltaAC, aC );
@@ -63,6 +65,11 @@ public class PUCK : MonoBehaviour {
 
     float deltaA = pid.WorkFunction ( aT, aC, Time.fixedDeltaTime );
     deltaA = Mathf.Clamp ( deltaA, -avMaxDelta, avMaxDelta );
+    float eccAngle = Vector3.Dot ( acs.rgb.transform.forward, Vector3.forward );
+
+    deltaA *= Mathf.Clamp ( eccAngle, 0, 1 );
+
+    Debug.Log ( eccAngle.ToString ( "F2" ) );   
     acs.rgb.AddTorque ( 0, 0, deltaA );
 
     deltaAT = aT;

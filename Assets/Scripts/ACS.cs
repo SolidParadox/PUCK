@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using UnityEngine;
 
 // Attitude Control System -> MIKA 2
@@ -69,7 +70,8 @@ public class ACS : MonoBehaviour {
 
     Vector2 deltaProcessed = Cutter( delta * acc * Time.fixedDeltaTime, rgb.velocity, umv * delta.magnitude );
 
-    rgb.AddForce ( deltaProcessed * rgb.mass / Time.fixedDeltaTime );
+    float eccAngle = Vector3.Dot ( rgb.transform.forward, Vector3.forward );
+    rgb.AddForce ( deltaProcessed * eccAngle * rgb.mass / Time.fixedDeltaTime );
 
     ResetDeltas ();
   }
