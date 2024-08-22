@@ -6,6 +6,8 @@ public class EnergyUser : MonoBehaviour {
   public float draw = 1;
   public int priority;
 
+  public float drawEfficiency;
+
   private void Start () {
     core.RegisterUser ( this );
   }

@@ -17,6 +17,9 @@ public class ACS : MonoBehaviour {
   protected int               ticks;
 
   protected bool              vLock;
+  
+  public EnergyUser       energyUser;
+  public float energyAccMul;
 
   public static Vector2 Cutter ( Vector2 a, Vector2 b, float m ) {
     if ( a.magnitude < 0.0001f ) return Vector2.zero;
@@ -54,24 +57,20 @@ public class ACS : MonoBehaviour {
     if ( delta.sqrMagnitude > 1 ) {
       delta.Normalize ();
     }
+    energyUser.draw = Mathf.Abs ( delta.magnitude * energyAccMul );
 
     umv = Mathf.Max ( 0, Mathf.Abs ( delta.magnitude ) ) * mxv;
-
-    Vector2 deltaSpeed = Vector2.zero;
-
-    if ( delta.sqrMagnitude > 0.05f || rgb.velocity.sqrMagnitude < 0.05f ) {
-      deltaSpeed = Vector3.Project ( rgb.velocity, rgb.transform.up );
-    }
 
     rgb.velocity -= rgb.velocity * strengthD * Time.fixedDeltaTime;
     if ( rgb.velocity.magnitude > umv ) {
       rgb.velocity -= ( rgb.velocity - rgb.velocity.normalized * umv ) * strengthDOS * Time.fixedDeltaTime;
     }
 
-    Vector2 deltaProcessed = Cutter( delta * acc * Time.fixedDeltaTime, rgb.velocity, umv * delta.magnitude );
+    Vector2 deltaProcessed = Cutter( delta * energyUser.drawEfficiency * acc * Time.fixedDeltaTime, rgb.velocity, umv * delta.magnitude );
 
     float eccAngle = Vector3.Dot ( rgb.transform.forward, Vector3.forward );
-    rgb.AddForce ( deltaProcessed * eccAngle * rgb.mass / Time.fixedDeltaTime );
+
+    rgb.AddForce ( deltaProcessed * eccAngle * rgb.mass / Time.fixedDeltaTime );    
 
     ResetDeltas ();
   }

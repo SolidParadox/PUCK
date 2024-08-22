@@ -30,8 +30,6 @@ public class PUCK : MonoBehaviour {
 
   public void StartStun () {
     stunDelta = stunDuration;
-    deltaAT %= 360;
-    deltaAC %= 360;
     pid.ResetError ( deltaAT, deltaAC );
   }
 
@@ -69,7 +67,6 @@ public class PUCK : MonoBehaviour {
 
     deltaA *= Mathf.Clamp ( eccAngle, 0, 1 );
 
-    Debug.Log ( eccAngle.ToString ( "F2" ) );   
     acs.rgb.AddTorque ( 0, 0, deltaA );
 
     deltaAT = aT;
