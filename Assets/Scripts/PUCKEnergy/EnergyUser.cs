@@ -9,6 +9,6 @@ public class EnergyUser : MonoBehaviour {
   public float drawEfficiency;
 
   private void Start () {
-    core.RegisterUser ( this );
+    if ( core != null ) core.RegisterUser ( this );
   }
 }
