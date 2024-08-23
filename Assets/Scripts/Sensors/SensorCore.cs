@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class SensorCore : MonoBehaviour {
   public List<GameObject> contacts = new List<GameObject>();
@@ -40,6 +42,17 @@ public class SensorCore : MonoBehaviour {
     if ( CheckTag ( alpha.tag ) && !contacts.Contains ( alpha ) ) {
       Breached = true;
       contacts.Add ( alpha );
+      SensorBeaconWeight sbw;
+      if ( alpha.TryGetComponent( out sbw ) ) {
+        contacts.OrderBy ( c => Comparer<GameObject>.Create( ( x, y ) => { 
+          SensorBeaconWeight bwX = x.GetComponent<SensorBeaconWeight>();  
+          SensorBeaconWeight bwY = y.GetComponent<SensorBeaconWeight>();
+          int wx = bwX == null ? 0 : bwX.weight;
+          int wy = bwY == null ? 0 : bwY.weight;
+          return wx > wy ? 1 : wx < wy ? -1 : 0;
+        }  ) );
+        // users.OrderBy ( u => Comparer<EnergyUser>.Create ( ( x, y ) => x.priority > y.priority ? 1 : x.priority < y.priority ? -1 : 0 ) );
+      }
     }
   }
 
