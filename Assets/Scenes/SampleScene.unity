@@ -1559,6 +1559,7 @@ MonoBehaviour:
   handlePos: {fileID: 1889378496}
   handleNeg: {fileID: 83594089}
   lerpStrength: 2
+  drawMagnitude: 10
 --- !u!1 &800952110
 GameObject:
   m_ObjectHideFlags: 0

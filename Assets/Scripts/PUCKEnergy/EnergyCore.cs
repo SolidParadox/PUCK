@@ -38,6 +38,7 @@ public class EnergyCore : MonoBehaviour {
   public void LateUpdate () {
     currentDraw = 0;
     for ( int i = 0; i < users.Count; i++ ) {
+      if ( !users[i].enabled ) { continue; }
       currentDraw += users[i].draw;
       storedEnergy -= users[i].draw * Time.deltaTime;
 
