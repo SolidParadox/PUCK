@@ -37,8 +37,9 @@ public class PUCK : MonoBehaviour {
     Vector2 phi = new Vector2 ( Input.GetAxis ( "Horizontal" ), Input.GetAxis ( "Vertical" ) );
 
     if ( phi.magnitude > 0.1f && !IsStunned ) {
+      float eccAngle = Vector3.Dot ( acs.rgb.transform.forward, Vector3.forward );
       direction = phi;
-      acs.AddThrusterOutput ( direction );
+      acs.AddThrusterOutput ( eccAngle * direction );
     }
 
     if ( IsStunned ) {

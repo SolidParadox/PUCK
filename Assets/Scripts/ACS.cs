@@ -7,7 +7,6 @@ public class ACS : MonoBehaviour {
 
   public  float           acc;
   public  float           mxv;
-  private float umv;
 
   public  float           strengthDOS;      // DRAG for OVERSPEED
   public  float           strengthD;
@@ -20,6 +19,8 @@ public class ACS : MonoBehaviour {
   
   public EnergyUser       energyUser;
   public float energyAccMul;
+  
+  public Vector3 eccentricPosition; // Eccentric Position
 
   public static Vector2 Cutter ( Vector2 a, Vector2 b, float m ) {
     if ( a.magnitude < 0.0001f ) return Vector2.zero;
@@ -59,7 +60,7 @@ public class ACS : MonoBehaviour {
     }
     energyUser.draw = Mathf.Abs ( delta.magnitude * energyAccMul );
 
-    umv = Mathf.Max ( 0, Mathf.Abs ( delta.magnitude ) ) * mxv;
+    float umv = Mathf.Max ( 0, Mathf.Abs ( delta.magnitude ) ) * mxv;
 
     rgb.velocity -= rgb.velocity * strengthD * Time.fixedDeltaTime;
     if ( rgb.velocity.magnitude > umv ) {
@@ -68,10 +69,10 @@ public class ACS : MonoBehaviour {
 
     Vector2 deltaProcessed = Cutter( delta * energyUser.drawEfficiency * acc * Time.fixedDeltaTime, rgb.velocity, umv * delta.magnitude );
 
-    float eccAngle = Vector3.Dot ( rgb.transform.forward, Vector3.forward );
+    Vector3 appliedForce = deltaProcessed * rgb.mass / Time.fixedDeltaTime;
 
-    rgb.AddForce ( deltaProcessed * eccAngle * rgb.mass / Time.fixedDeltaTime );    
-
+    rgb.AddForceAtPosition ( appliedForce, rgb.position + eccentricPosition );
+   
     ResetDeltas ();
   }
 

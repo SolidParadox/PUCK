@@ -8,7 +8,8 @@ public class EnemyBrain : MonoBehaviour {
 
   private void FixedUpdate () {
     if ( interestSensor.Breached ) {
-      acs.AddThrusterOutput ( ( interestSensor.contacts[ 0 ].transform.position - acs.rgb.position ).normalized );
+      acs.AddThrusterOutput ( (Vector2) ( ( interestSensor.contacts[0].transform.position - acs.rgb.position ).normalized ) );
+      Debug.DrawLine ( acs.rgb.position, interestSensor.contacts[0].transform.position, Color.red );
     }
   }
 }
